@@ -28,8 +28,10 @@ export class SampleBodyContentComponent implements OnInit {
       "[OWW] - Learn SVGator for Creating OWW Animation"
     ])
   ]);
+  
 
-  ngOnInit() {
+  ngOnInit() :void {
+
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -42,6 +44,5 @@ export class SampleBodyContentComponent implements OnInit {
         event.currentIndex);
     }
   }
-
 
 }

@@ -1,82 +1,84 @@
-<span class="check-icon">check</span>
-<span class="secondLine">Daily Task</span> 
-<div class="topIconsDiv">
-  <div class="avatar mr-1">
-    <div class="avatar-content">
-      <i data-feather="search" class="font-medium-3"></i>
-    </div>
-  </div>
-  <div class="avatar mr-1">
-    <div class="avatar-content">
-      <i data-feather="mail" class="font-medium-3"></i>
-    </div>
-  </div>
-  <button class="btn avatar avatar-border bg-transparent p-0 ">
-    <img src="/assets/images/avatars/1.png" alt="user_avatar" height="32" width="32" />
-  </button>
-</div>
 <div>
-    <p>
-    Hello this is the third section description Hello this is the third section description
-    Hello this is the third section description Hello this is the third section description
-    </p>
-</div>
-<div class="root">
-  
-
-    <div class="board">
-  
-      
-      <div class="board-wrapper">
-  
-        <div class="board-columns" cdkDropListGroup>
-          <div class="board-column" *ngFor="let column of board.columns">
-  
-            <div class="column-title">
-              {{ column.name }}
-            </div>
-  
-            <div class="tasks-container"
-            cdkDropList
-            [cdkDropListData]="column.tasks"
-            (cdkDropListDropped)="drop($event)">
-              <div class="task" *ngFor="let item of column.tasks" cdkDrag>
-                <div>
-                  <div class="avatar bg-light-success mr-1">
-                      <div class="avatar-content">
-                          <i data-feather="coffee" class="font-medium-3"></i>
-                      </div>
-                  </div>
-                  <div class="topIconsDiv">
-                    <i data-feather="more-horizontal" class="font-medium-3 cursor-pointer"></i>
-                  </div>
-              </div>
-                <div style="margin:10px ;">
-                  {{ item }}
-                </div>          
-                <div class="design-group mb-2 pt-50">
-                  <div style="margin-left:10px;" class="badge badge-light-warning">
-                      Mar 26
-                  </div>
-                  <div  class="topIconsDiv btn avatar avatar-border bg-transparent p-0 buttonStyle">
-                      <img src="/assets/images/avatars/2-small.png" alt="user_avatar" height="30" width="30 " />
-                  </div>
-                  <div  class="topIconsDiv btn avatar avatar-border bg-transparent p-0 buttonStyle">
-                      <img src="/assets/images/avatars/3-small.png" alt="user_avatar" height="30" width="30 " />
-                  </div>
-                  <div  class="topIconsDiv btn avatar avatar-border bg-transparent p-0 buttonStyle">
-                      <img src="/assets/images/avatars/4-small.png" alt="user_avatar" height="30" width="30 " />
-                  </div>
-              </div>          
-              </div>
-              
-            </div>
-          </div>
-  
-        </div>
-  
+  <span class="check-icon">check</span>
+  <span class="secondLine">Daily Task</span> 
+  <div class="topIconsDiv">
+    <div class="avatar mr-1">
+      <div class="avatar-content">
+        <i data-feather="search" class="font-medium-3"></i>
       </div>
-  
     </div>
-  
+    <div class="avatar mr-1">
+      <div class="avatar-content">
+        <i data-feather="mail" class="font-medium-3"></i>
+      </div>
+    </div>
+    <button class="btn avatar avatar-border bg-transparent p-0 ">
+      <img src="/assets/images/avatars/1.png" alt="user_avatar" height="32" width="32" />
+    </button>
   </div>
+  <div>
+      <p>
+      Hello this is the third section description Hello this is the third section description
+      Hello this is the third section description Hello this is the third section description
+      </p>
+  </div>
+  <div class="root">
+    
+
+      <div class="board">
+    
+        
+        <div class="board-wrapper">
+    
+          <div class="board-columns" cdkDropListGroup>
+            <div class="board-column" *ngFor="let column of board.columns">
+    
+              <div class="column-title">
+                {{ column.name }}
+              </div>
+    
+              <div class="tasks-container"
+              cdkDropList
+              [cdkDropListData]="column.tasks"
+              (cdkDropListDropped)="drop($event)">
+                <div class="task" *ngFor="let item of column.tasks" cdkDrag>
+                  <div>
+                    <div class="avatar bg-light-success mr-1">
+                        <div class="avatar-content">
+                            <i data-feather="coffee" class="font-medium-3"></i>
+                        </div>
+                    </div>
+                    <div class="topIconsDiv">
+                      <i data-feather="more-horizontal" class="font-medium-3 cursor-pointer"></i>
+                    </div>
+                </div>
+                  <div style="margin:10px ;">
+                    {{ item }}
+                  </div>          
+                  <div class="design-group mb-2 pt-50">
+                    <div style="margin-left:10px;" class="badge badge-light-warning">
+                        Mar 26
+                    </div>
+                    <div  class="topIconsDiv btn avatar avatar-border bg-transparent p-0 buttonStyle">
+                        <img src="/assets/images/avatars/2-small.png" alt="user_avatar" height="30" width="30 " />
+                    </div>
+                    <div  class="topIconsDiv btn avatar avatar-border bg-transparent p-0 buttonStyle">
+                        <img src="/assets/images/avatars/3-small.png" alt="user_avatar" height="30" width="30 " />
+                    </div>
+                    <div  class="topIconsDiv btn avatar avatar-border bg-transparent p-0 buttonStyle">
+                        <img src="/assets/images/avatars/4-small.png" alt="user_avatar" height="30" width="30 " />
+                    </div>
+                </div>          
+                </div>
+                
+              </div>
+            </div>
+    
+          </div>
+    
+        </div>
+    
+      </div>
+    
+    </div>
+</div>

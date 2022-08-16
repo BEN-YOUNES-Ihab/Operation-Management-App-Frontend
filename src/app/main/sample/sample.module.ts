@@ -6,6 +6,7 @@ import { CoreCommonModule } from '@core/common.module';
 
 import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 import { SampleComponent } from './sample.component';
 import { HomeComponent } from './home.component';
@@ -27,7 +28,7 @@ const routes = [
 
 @NgModule({
   declarations: [SampleComponent, HomeComponent, ChatComponent, SampleBodyContentComponent],
-  imports: [RouterModule.forChild(routes),DragDropModule, ContentHeaderModule, TranslateModule, CoreCommonModule],
+  imports: [RouterModule.forChild(routes),PerfectScrollbarModule,DragDropModule, ContentHeaderModule, TranslateModule, CoreCommonModule],
   exports: [SampleComponent, HomeComponent]
 })
 export class SampleModule {}
