@@ -1,0 +1,45 @@
+@import '@core/scss/angular/libs/flatpickr.component.scss';
+@import '@core/scss/angular/libs/toastr.component.scss';
+
+.marginleft{
+    margin-left: 14px;
+}
+.error-class{
+    margin-top: 20px;
+}
+.myToast {
+    background-color: $white;
+    color: $body-color !important;
+    .myToast-close-button {
+      color: $body-color;
+      font-size: 1.75rem;
+      font-weight: $font-weight-normal;
+      top: 0;
+      right: 0;
+      text-shadow: none;
+  
+      &:focus {
+        outline: none;
+      }
+    }
+    .myToast-title {
+      font-size: $font-size-base;
+      font-weight: $font-weight-bolder;
+      line-height: 1.75;
+    }
+    .myToast-progress {
+      opacity: 1;
+    }
+    &:before {
+      content: '';
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      color: $white;
+      position: absolute;
+      left: 1.25rem;
+      background-size: $font-size-base;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }

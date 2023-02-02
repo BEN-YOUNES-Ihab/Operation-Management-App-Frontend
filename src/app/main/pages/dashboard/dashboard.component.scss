@@ -1,0 +1,24 @@
+@import '@core/scss/angular/libs/flatpickr.component.scss';
+
+.cardClass{
+    padding: 10px;
+}
+
+.demo-chart {
+    height: 400px;
+  }
+
+  #parent {
+    width: 100%;
+   
+    overflow-x: auto;
+}
+.child {
+    display: inline-block;
+    width: 10%;
+}
+.secondChild {
+    display: inline-block;
+    width: 10%;
+    margin-right: 79%;
+}

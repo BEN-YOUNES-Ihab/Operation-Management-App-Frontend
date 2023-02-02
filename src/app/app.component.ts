@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
   coreConfig: any;
   menu: any;
   defaultLanguage: 'en'; // This language will be used as a fallback when a translation isn't found in the current language
-  appLanguage: 'en'; // Set application default language i.e fr
+  appLanguage: 'fr'; // Set application default language i.e fr
 
   // Private
   private _unsubscribeAll: Subject<any>;

@@ -5,6 +5,8 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { CoreConfigService } from '@core/services/config.service';
+import { UserService } from 'app/main/admin/users/services/users.service';
+import { User } from 'app/main/admin/users/models/user.model';
 
 @Component({
   selector: 'app-auth-login-v2',
@@ -34,10 +36,13 @@ export class AuthLoginV2Component implements OnInit {
     private _coreConfigService: CoreConfigService,
     private _formBuilder: FormBuilder,
     private _route: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    private userService: UserService
   ) {
     this._unsubscribeAll = new Subject();
-
+    if (this.userService.isLoggedIn()) {
+      this._router.navigate(['/']);
+    }
     // Configure the layout
     this._coreConfigService.config = {
       layout: {
@@ -56,41 +61,16 @@ export class AuthLoginV2Component implements OnInit {
     };
   }
 
-  // convenience getter for easy access to form fields
   get f() {
     return this.loginForm.controls;
   }
 
-  /**
-   * Toggle password
-   */
+
   togglePasswordTextType() {
     this.passwordTextType = !this.passwordTextType;
   }
 
-  onSubmit() {
-    this.submitted = true;
 
-    // stop here if form is invalid
-    if (this.loginForm.invalid) {
-      return;
-    }
-
-    // Login
-    this.loading = true;
-
-    // redirect to home page
-    setTimeout(() => {
-      this._router.navigate(['/']);
-    }, 100);
-  }
-
-  // Lifecycle Hooks
-  // -----------------------------------------------------------------------------------------------------
-
-  /**
-   * On init
-   */
   ngOnInit(): void {
     this.loginForm = this._formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -106,6 +86,51 @@ export class AuthLoginV2Component implements OnInit {
     });
   }
 
+  login(form: FormGroup){
+    this.submitted = true;
+    // stop here if form is invalid
+
+    if (form.invalid) {
+      return;
+    }else{
+      this.userService.login(form.value).subscribe(item =>{
+      if(item!=null){
+        this.userService.SaveTokens(item);
+        localStorage.setItem('email', form.value.email);
+        this.gettingRoleNow();
+        this.loading = true;
+        setTimeout(() => {
+          this._router.navigate(['/']);
+        }, 500);
+      }
+      },(err)=>{
+        this.error = "L'identifiant ou le mot de passe est incorrect";
+        this.loading = false;
+      });
+    }
+}
+gettingRoleNow(){
+  this.userService.getUserList().subscribe((res) => {
+    const users = res as User[];
+    for(let i=0;i<users.length;i++){
+      if(users[i].email== localStorage.getItem('email')){
+        if(users[i].role){
+          localStorage.setItem('role', users[i].role);
+        }
+        localStorage.setItem('id', users[i]._id);
+      } 
+    }
+  });
+}
+loginIsValid(email :any, dataemail:any): boolean {
+  if(email === dataemail){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+
   /**
    * On destroy
    */
@@ -115,3 +140,4 @@ export class AuthLoginV2Component implements OnInit {
     this._unsubscribeAll.complete();
   }
 }
+

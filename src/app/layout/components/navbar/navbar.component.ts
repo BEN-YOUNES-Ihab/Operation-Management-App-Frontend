@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, HostBinding, HostListener, ViewEncapsulat
 import { MediaObserver } from '@angular/flex-layout';
 
 import * as _ from 'lodash';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -11,10 +11,11 @@ import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.s
 import { CoreConfigService } from '@core/services/config.service';
 import { CoreMediaService } from '@core/services/media.service';
 
-import { User } from 'app/auth/models';
 
 import { coreConfig } from 'app/app-config';
 import { Router } from '@angular/router';
+import { UserService } from 'app/main/admin/users/services/users.service';
+import { User } from 'app/main/admin/users/models/user.model';
 
 @Component({
   selector: 'app-navbar',
@@ -25,12 +26,11 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit, OnDestroy {
   public horizontalMenu: boolean;
   public hiddenMenu: boolean;
-
   public coreConfig: any;
   public currentSkin: string;
   public prevSkin: string;
 
-  public currentUser: User;
+  currentUser: User;
 
   public languageOptions: any;
   public navigation: any;
@@ -81,9 +81,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private _coreMediaService: CoreMediaService,
     private _coreSidebarService: CoreSidebarService,
     private _mediaObserver: MediaObserver,
-    public _translateService: TranslateService
+    public _translateService: TranslateService,
+    public userService: UserService
   ) {
-    this._authenticationService.currentUser.subscribe(x => (this.currentUser = x));
 
     this.languageOptions = {
       en: {
@@ -165,10 +165,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
    * Logout method
    */
   logout() {
-    this._authenticationService.logout();
+    this.userService.logout();
     this._router.navigate(['/pages/authentication/login-v2']);
   }
+  /*
+  getCurrentUser(){
+    this.userService.getUser(localStorage.getItem("id")).subscribe((res) => {
+      this.currentUser = res as User;
+    });
 
+  }
+  */
   // Lifecycle Hooks
   // -----------------------------------------------------------------------------------------------------
 
@@ -176,9 +183,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
    * On init
    */
   ngOnInit(): void {
-    // get the currentUser details from localStorage
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
+    // get the currentUser details     
+    if(this.userService.isLoggedIn()){
+      this.userService.getUser(localStorage.getItem('id')).subscribe(data=>{
+        this.userService.userSubject$.next(data as User);
+       });
+       this.userService.getUsersubject().subscribe(res=>{
+         this.currentUser = res as User;
+       });
+    }
+    
     // Subscribe to the config changes
     this._coreConfigService.config.pipe(takeUntil(this._unsubscribeAll)).subscribe(config => {
       this.coreConfig = config;

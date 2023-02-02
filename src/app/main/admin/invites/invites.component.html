@@ -1,0 +1,94 @@
+<div class="card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor=" let invite of invites" >
+                <td *ngIf="invite.isactive">{{invite.email}}</td>
+                <td *ngIf="invite.isactive && invite.role==='Admin'">Administrateur</td>
+                <td *ngIf="invite.isactive && invite.role==='User'">Utilisateur</td>
+                <td *ngIf="invite.isactive">
+                  <button (click)="onDelete(invite.email)" type="button" class="btn btn-icon icon btn-danger" >
+                    <span [data-feather]="'trash'"></span>
+                  </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col text-center">
+        <button style="flex: start;" (click)="clicknewUser(InviteUserModal)" type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-success">
+          Inviter un nouveau utilisateur
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Invite User Modal -->
+ <ng-template #InviteUserModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel1">Inviter un utilisateur</h4>
+      <button type="button" id="secondclose" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+      <form #inviteUserForm="ngForm">
+        <div class="mb-3">
+          <label for="to" class="form-label">Email</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            name="to"  
+            [(ngModel)]="to" 
+            placeholder="Enter user email" 
+            #formToRef="ngModel"
+            required
+            [email]="true"
+            [class.error]="inviteSubmitted && formToRef.invalid"
+          >
+          <span *ngIf="inviteSubmitted && formToRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formToRef.errors.required">L'email' est requis!</small>
+            <small class="form-text text-danger" *ngIf="formToRef.errors.email">L'email doit être une adresse mail valide!</small>
+
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="role" class="form-label">Rôle</label>
+          <select 
+            required  
+            class="form-select" 
+            name="role" 
+            [(ngModel)]="role"
+            #formRoleRef="ngModel"
+            required
+            [class.error]="inviteSubmitted && formRoleRef.invalid"
+          >
+            <option value="User">Utilisateur</option>
+            <option value="Admin">Administrateur</option>
+          </select>
+          <span *ngIf="inviteSubmitted && formRoleRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formRoleRef.errors.required">La rôle est requis!</small>
+          </span>
+        </div>
+        <div class="mb-3">
+          <input type="hidden" class="form-control" name="subject" value="Invitation" [ngModel]="emailSubject">
+        </div>
+        <div class="mb-3">
+          <input type="hidden" class="form-control" name="message"  [(ngModel)]="emailMessage+to+'/'+role">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="postEmail(inviteUserForm)" class="btn btn-primary">Send Invite</button>
+    </div>
+  </ng-template>
+  <!-- / Invite User Modal -->

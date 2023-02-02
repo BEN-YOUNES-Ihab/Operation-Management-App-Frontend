@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { CoreMenuService } from '@core/components/core-menu/core-menu.service';
-
+import { UserService } from 'app/main/admin/users/services/users.service';
 @Component({
   selector: '[core-menu]',
   templateUrl: './core-menu.component.html',
@@ -14,7 +14,7 @@ import { CoreMenuService } from '@core/components/core-menu/core-menu.service';
 })
 export class CoreMenuComponent implements OnInit {
   currentUser: any;
-
+  currentRole: string;
   @Input()
   layout = 'vertical';
 
@@ -29,7 +29,7 @@ export class CoreMenuComponent implements OnInit {
    * @param {ChangeDetectorRef} _changeDetectorRef
    * @param {CoreMenuService} _coreMenuService
    */
-  constructor(private _changeDetectorRef: ChangeDetectorRef, private _coreMenuService: CoreMenuService) {
+  constructor(public userService: UserService,private _changeDetectorRef: ChangeDetectorRef, private _coreMenuService: CoreMenuService) {
     // Set the private defaults
     this._unsubscribeAll = new Subject();
   }
@@ -43,7 +43,7 @@ export class CoreMenuComponent implements OnInit {
   ngOnInit(): void {
     // Set the menu either from the input or from the service
     this.menu = this.menu || this._coreMenuService.getCurrentMenu();
-
+    this.currentRole = this.userService.GetRole();
     // Subscribe to the current menu changes
     this._coreMenuService.onMenuChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(() => {
       this.currentUser = this._coreMenuService.currentUser;

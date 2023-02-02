@@ -16,10 +16,10 @@ import { CoreConfig } from '@core/types';
 // prettier-ignore
 export const coreConfig: CoreConfig = {
   app: {
-    appName     : 'Vuexy',                                        // App Name
-    appTitle    : 'Vuexy - Angular 12+ Bootstrap Admin Template', // App Title
-    appLogoImage: 'assets/images/logo/logo.svg',                  // App Logo
-    appLanguage : 'en',                                           // App Default Language (en, fr, de, pt etc..)
+    appName     : 'DAF',                                        // App Name
+    appTitle    : 'DAF', // App Title
+    appLogoImage: 'assets/images/logo/technagilesmlogo.png',                  // App Logo
+    appLanguage : 'fr',                                           // App Default Language (en, fr, de, pt etc..)
   },
   layout: {
     skin  : 'default',                        // default, dark, bordered, semi-dark
@@ -44,7 +44,7 @@ export const coreConfig: CoreConfig = {
       customBackgroundColor: false,           // Boolean: true, false
       backgroundColor      : ''               // BS color i.e bg-primary, bg-success
     },
-    enableLocalStorage: true,
+    enableLocalStorage: false,
     customizer  : false,                       // Boolean: true, false (Enable theme customizer)
     scrollTop   : false,                       // Boolean: true, false (Enable scroll to top button)
     buyNow      : false                        // Boolean: true, false (Set false in real project, For demo purpose only)

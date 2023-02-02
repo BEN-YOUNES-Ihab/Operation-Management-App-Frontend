@@ -10,25 +10,44 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 import { SampleComponent } from './sample.component';
 import { HomeComponent } from './home.component';
-import { ChatComponent } from './chat/chat.component';
-import { SampleBodyContentComponent } from './sample-body-content/sample-body-content.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CsvModule } from '@ctrl/ngx-csv';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+
+import { CardSnippetModule } from '@core/components/card-snippet/card-snippet.module';
+
+import { AuthGuard } from 'app/auth/helpers/auth.guards';
 
 const routes = [
   {
     path: 'sample',
     component: SampleComponent,
-    data: { animation: 'sample' }
+    data: { animation: 'sample' },
+    canActivate: [AuthGuard]
   },
   {
     path: 'home',
     component: HomeComponent,
-    data: { animation: 'home' }
+    data: { animation: 'home' },
+    canActivate: [AuthGuard]
   }
 ];
 
 @NgModule({
-  declarations: [SampleComponent, HomeComponent, ChatComponent, SampleBodyContentComponent],
-  imports: [RouterModule.forChild(routes),PerfectScrollbarModule,DragDropModule, ContentHeaderModule, TranslateModule, CoreCommonModule],
+  declarations: [SampleComponent, HomeComponent],
+  imports: [RouterModule.forChild(routes),
+    PerfectScrollbarModule,
+    DragDropModule,
+    ContentHeaderModule,
+    TranslateModule,
+    CoreCommonModule,
+    NgbModule,
+    TranslateModule,
+    CoreCommonModule,
+    ContentHeaderModule,
+    CardSnippetModule,
+    NgxDatatableModule,
+    CsvModule],
   exports: [SampleComponent, HomeComponent]
 })
 export class SampleModule {}

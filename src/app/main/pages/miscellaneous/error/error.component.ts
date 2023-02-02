@@ -4,6 +4,8 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 import { CoreConfigService } from '@core/services/config.service';
+import { UserService } from 'app/main/admin/users/services/users.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-error',
@@ -21,7 +23,7 @@ export class ErrorComponent implements OnInit {
    *
    * @param {CoreConfigService} _coreConfigService
    */
-  constructor(private _coreConfigService: CoreConfigService) {
+  constructor(private _coreConfigService: CoreConfigService,private _router: Router,public userService: UserService) {
     this._unsubscribeAll = new Subject();
 
     // Configure the layout
@@ -42,6 +44,10 @@ export class ErrorComponent implements OnInit {
     };
   }
 
+  logout(){
+    this.userService.logout();
+    this._router.navigate(['/pages/authentication/login-v2']);
+  }
   // Lifecycle Hooks
   // -----------------------------------------------------------------------------------------------------
 

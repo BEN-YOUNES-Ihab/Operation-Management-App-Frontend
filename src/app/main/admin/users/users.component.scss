@@ -1,0 +1,75 @@
+@import '@core/scss/angular/libs/select.component.scss';
+@import '@core/scss/angular/libs/flatpickr.component.scss';
+@import '@core/scss/angular/libs/datatables.component.scss';
+@import '@core/scss/angular/libs/toastr.component.scss';
+
+.datatable-scroll {
+  width: auto !important;
+}
+
+.icon{
+    margin-left: 5px;
+}
+.margin{
+    margin: 15px;
+}
+.marginPagination{
+    margin-top: 10px;
+}
+table {
+    table-layout: fixed;
+    width: 100%;   
+}
+.pagination-overflow-auto {
+    .card-body {
+      overflow: auto;
+    }
+  }
+.half-input{
+    width: 20%;
+}
+
+.buttonMargin{
+    margin-left: 22%;
+}
+.selectWidth{
+    width: 70%;
+}
+
+
+.myToast {
+    background-color: $white;
+    color: $body-color !important;
+    .myToast-close-button {
+      color: $body-color;
+      font-size: 1.75rem;
+      font-weight: $font-weight-normal;
+      top: 0;
+      right: 0;
+      text-shadow: none;
+  
+      &:focus {
+        outline: none;
+      }
+    }
+    .myToast-title {
+      font-size: $font-size-base;
+      font-weight: $font-weight-bolder;
+      line-height: 1.75;
+    }
+    .myToast-progress {
+      opacity: 1;
+    }
+    &:before {
+      content: '';
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      color: $white;
+      position: absolute;
+      left: 1.25rem;
+      background-size: $font-size-base;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }

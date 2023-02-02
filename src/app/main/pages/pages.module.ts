@@ -10,9 +10,14 @@ import { ContentHeaderModule } from 'app/layout/components/content-header/conten
 
 import { AuthenticationModule } from './authentication/authentication.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
-
+import { RegistrationModule } from './registration/registration.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { AccountSettingsModule } from './account-settings/account-settings.module';
+import { DomainsModule } from './domains/domains.module';
+import { EventsModule } from './events/events.module';
 @NgModule({
-  declarations: [],
+  declarations: [      
+  ],
   imports: [
     CommonModule,
     CoreCommonModule,
@@ -21,7 +26,12 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
     NgSelectModule,
     FormsModule,
     AuthenticationModule,
-    MiscellaneousModule
+    MiscellaneousModule,
+    RegistrationModule,
+    DashboardModule,
+    AccountSettingsModule,
+    DomainsModule,
+    EventsModule
   ],
 
   providers: []

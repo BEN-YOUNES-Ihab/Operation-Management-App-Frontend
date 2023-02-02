@@ -59,28 +59,27 @@
         aria-haspopup="true"
         aria-expanded="false"
       >
-        <div class="user-nav d-sm-flex d-none">
-          <span class="user-name font-weight-bolder">John Doe</span><span class="user-status">Sample</span>
-        </div>
+        <div class="user-nav d-sm-flex d-none" *ngIf="currentUser" >
+            <span class="user-name font-weight-bolder">{{ currentUser.name + " " +  currentUser.lastname}}</span>
+            <span *ngIf="currentUser.role=='Admin'" class="user-status">Administrateur</span>
+            <span *ngIf="currentUser.role=='User'" class="user-status">Utilisateur</span>
+
+          </div>
         <span class="avatar"
           ><img
             class="round"
-            src="../../../../assets/images/portrait/small/avatar-s-11.jpg"
+            src="../../../../assets/images/portrait/small/avatar-s-27.png"
             alt="avatar"
             height="40"
-            width="40" /><span class="avatar-status-online"></span
+            width="40" /><span class="avatar"></span
         ></span>
       </a>
       <div ngbDropdownMenu aria-labelledby="navbarUserDropdown" class="dropdown-menu dropdown-menu-right">
-        <a ngbDropdownItem [routerLink]="['/']"><span [data-feather]="'user'" [class]="'mr-50'"></span> Profile</a
-        ><a ngbDropdownItem [routerLink]="['/']"><span [data-feather]="'mail'" [class]="'mr-50'"></span> Inbox</a
-        ><a ngbDropdownItem [routerLink]="['/']"><span [data-feather]="'check-square'" [class]="'mr-50'"></span> Task</a
-        ><a ngbDropdownItem [routerLink]="['/']"
-          ><span [data-feather]="'message-square'" [class]="'mr-50'"></span> Chats</a
+        <a ngbDropdownItem [routerLink]="['/pages/account-settings']"
+          ><span [data-feather]="'settings'" [class]="'mr-50'"></span> Paramètres</a
         >
-        <div class="dropdown-divider"></div>
-        <a ngbDropdownItem [routerLink]="['/pages/authentication/login-v2']"
-          ><span [data-feather]="'power'" [class]="'mr-50'"></span> Logout</a
+        <a ngbDropdownItem (click)="logout()"
+          ><span [data-feather]="'power'" [class]="'mr-50'"></span> Se déconnecter</a
         >
       </div>
     </li>

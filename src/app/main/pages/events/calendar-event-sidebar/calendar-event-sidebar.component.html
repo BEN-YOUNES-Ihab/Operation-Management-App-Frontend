@@ -1,0 +1,194 @@
+<!-- Calendar Add/Update/Delete event modal-->
+<div class="modal-dialog sidebar-lg">
+    <div class="modal-content p-0">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="toggleEventSidebar()">
+        ×
+        </button>
+        <div class="modal-header mb-1">
+            <h5 class="modal-title">{{ isDataEmpty === true ? 'Ajouter' : 'Modifier' }} un événement</h5>
+        </div>
+        <div class="modal-body flex-grow-1 pb-sm-0 pb-3" *ngIf="selectedEvent">
+            <form #eventForm="ngForm" class="event-form needs-validation">
+              <input type="hidden" class="form-control" name="_id"  [(ngModel)]="selectedEvent._id">
+                <div class="form-group">
+                    <label for="tile" class="form-label">Titre</label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      id="title" name="title" 
+                      [(ngModel)]="selectedEvent.title" 
+                      placeholder="Titre" 
+                      required
+                      [class.error]="eventForm.submitted && formTitleRef.invalid"
+                      #formTitleRef="ngModel"
+                    >
+                    <span *ngIf="eventForm.submitted && formTitleRef.invalid" class="invalid-form">
+                      <small class="form-text text-danger" *ngIf="formTitleRef.errors.required">Le titre est requis!</small>
+                    </span>
+                </div>
+                <div class="form-group">
+                  <label for="type" class="form-label">Type</label>
+                  <ng-select
+                    [items]="selectLabel"
+                    name="type"
+                    [(ngModel)]="selectedEvent.type"
+                    groupBy="cat"
+                    bindLabel="label"
+                    bindValue="label"
+                    required
+                    [class.error]="eventForm.submitted && formTypeRef.invalid"
+                    #formTypeRef="ngModel"
+                  >
+                    <ng-template ng-option-tmp ng-label-tmp let-item="item">
+                      <span class="bullet bullet-sm mr-50 bullet-{{ item.bullet }}"></span>
+                      {{ item.label }}
+                    </ng-template>
+                  </ng-select>
+                  <span *ngIf="eventForm.submitted && formTypeRef.invalid" class="invalid-form">
+                    <small class="form-text text-danger" *ngIf="formTypeRef.errors.required">Le type est requis!</small>
+                  </span>
+                </div>
+                <div class="form-group position-relative">
+                    <label for="date" class="form-label">Date</label>
+                    <ng2-flatpickr
+                    [config]="DateOptions"
+                    [(ngModel)]="selectedEvent.date"
+                    [setDate]="selectedEvent.date"
+                    name="date"
+                    required
+                    [class.error]="eventForm.submitted"
+                    #formDateRef
+                    >
+                    </ng2-flatpickr>
+                    <!-- <span *ngIf="eventForm.submitted && formDateRef.invalid" class="invalid-form">
+                      <small class="form-text text-danger" *ngIf="formDateRef.errors.required">La date est requis!</small>
+                    </span> -->
+                </div>
+                <div class="form-group">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea 
+                      type="text" 
+                      class="form-control" 
+                      id="description" 
+                      [(ngModel)]="selectedEvent.description" 
+                      name="description" 
+                      placeholder="Description" 
+                      >
+                    </textarea>
+                </div>
+                <div class="form-group" *ngIf="selectedEvent.type!= 'Rappel' && selectedEvent.type!= '' ">
+                    <label for="category" class="form-label">Catégorie</label>
+                    <div class="input-group-append">
+                        <ng-select class="halfwidth"
+                          [items]="categorysList"
+                          bindLabel="name"
+                          name="category"
+                          [(ngModel)]="selectedEvent.category"
+                          required
+                          [class.error]="eventForm.submitted && formCategoryRef.invalid"
+                          #formCategoryRef="ngModel"
+                          >   
+                        </ng-select>
+                        <button (click)="clickAddCategory(categoryModal)" type="button" class="btn btn-icon btn-success buttonMargin" >
+                            <span [data-feather]="'plus'"></span>
+                        </button>
+                    </div>
+                    <span *ngIf="eventForm.submitted && formCategoryRef.invalid" class="invalid-form">
+                      <small class="form-text text-danger" *ngIf="formCategoryRef.errors.required">Veuillez choisir une catégorie!</small>
+                    </span>
+                </div>
+                <div class="form-group" *ngIf="selectedEvent.type!= 'Rappel' && selectedEvent.type!= '' ">
+                    <label for="value" class="form-label">Valeur</label>
+                    <input 
+                      type="number" 
+                      class="form-control" 
+                      id="value" 
+                      name="value" 
+                      placeholder="Valeur" 
+                      [(ngModel)]="selectedEvent.value"
+                      required
+                      [class.error]="eventForm.submitted && formValueRef.invalid"
+                      #formValueRef="ngModel">
+                      <span *ngIf="eventForm.submitted && formValueRef.invalid" class="invalid-form">
+                        <small class="form-text text-danger" *ngIf="formValueRef.errors.required">Veuillez entrer la valeur!</small>
+                      </span>
+                </div>
+                
+                
+                <div class="form-group d-flex">
+                    <button
+                      type="submit"
+                      class="btn btn-primary add-event-btn mr-1"
+                      *ngIf="isDataEmpty !== false; else addEventRef"
+                      (click)="addEvent(eventForm)"
+                      rippleEffect
+                    >
+                      Ajouter
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-cancel"
+                      data-dismiss="modal"
+                      (click)="toggleEventSidebar()"
+                      *ngIf="isDataEmpty !== false; else deleteEventRef"
+                      rippleEffect
+                    >
+                      Annuler
+                    </button>
+                    <ng-template #addEventRef>
+                      <button type="submit" class="btn btn-primary update-event-btn mr-1" (click)="updateEvent(eventForm)" rippleEffect>
+                        Modifier
+                      </button>
+                    </ng-template>
+                    <ng-template #deleteEventRef>
+                      <button class="btn btn-outline-danger btn-delete-event" (click)="ConfirmTextOpen(selectedEvent._id)" rippleEffect>Supprimer</button>
+                    </ng-template>
+                  </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add category Modal -->
+<ng-template #categoryModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="addCategorytitle" >Ajouter une catégorie</h4>
+      <button type="button" id="cancel" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+      <div class="form-group">
+        <ngb-alert class="error-class" [type]="'danger'" [dismissible]="false" *ngIf="error">
+          <div class="alert-body">
+            <p>{{ error }}</p>
+          </div>
+        </ngb-alert>
+      </div>
+      <form #categoryForm="ngForm" class="needs-validation">
+        <input type="hidden" class="form-control" name="_id"  ngModel>
+        <div class="form-group">
+          <label for="name" class="form-label">Nom du catégorie</label>
+          <input 
+          type="text" 
+          class="form-control" 
+          name="name"  
+          id="name"
+          ngModel 
+          placeholder="Nom du catégorie" 
+          required
+          [class.error]="categorySubmitted && formCategoryeRef.invalid"
+          #formCategoryeRef="ngModel"
+          >
+        </div>
+        <span *ngIf="categorySubmitted&& formCategoryeRef.invalid" class="invalid-form">
+          <small class="form-text text-danger" *ngIf="formCategoryeRef.errors.required">Le nom du catégorie est requis!</small>
+        </span>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" (click)="postCategoryDetails(categoryForm)" class="btn btn-primary">Ajouter</button>
+    </div>
+  </ng-template>
+  <!-- /Add category Modal -->
+                      

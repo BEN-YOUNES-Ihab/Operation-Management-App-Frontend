@@ -1,0 +1,210 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <div class="card">
+      <div class="card-header">
+        <h1>Liste de domaines</h1>
+      </div>
+      <nav class="navbar">
+        <button (click)="clickAddDomain(modalBasic)" type="button"  class="btn btn-success">
+          <span [data-feather]="'plus'" [class]="'mr-25'"></span> Ajouter un domaine
+        </button>
+        <div>
+          <label class="d-flex align-items-center">Filtrer</label>
+          <input class="form-control" type="search" placeholder="Filtrer" (keyup)="filterUpdate($event)">
+        </div>
+      </nav>
+      <div class="border-top" style="margin-bottom: 1rem !important;">
+      </div> 
+      <div class="col-md-12 mb-3" style="margin-top: 10px;">
+        <ngx-datatable 
+            *ngIf="domainsList && contractorsList"
+            class="material container striped" 
+            [rows]="tableRows" [columnMode]="'flex'" 
+            [rowHeight]="58"
+            class="bootstrap core-bootstrap"
+            [limit]="10"
+            [columnMode]="ColumnMode.force"
+            [headerHeight]="40"
+            [footerHeight]="50"
+            [scrollbarH]="true"
+            [limit]="basicSelectedOption">
+            <ngx-datatable-column name="Nom" prop="name" [flexGrow]="2">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.name }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Fournisseur" prop="contractor.name"[flexGrow]="2">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{row?.contractor?.name}}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Date d'éxpiration" prop="expiration_date" [flexGrow]="2">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{row?.expiration_date | date: 'dd-MM-yyyy'}}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Montant (DT)" prop="price" [flexGrow]="2">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{row?.price}}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [flexGrow]="2" name="Actions" [sortable]="false">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <button (click)="onEdit(row, modalBasic)" type="button" class="btn btn-icon icon btn-info" >
+                  <span [data-feather]="'edit'"></span></button>
+                <button (click)="ConfirmTextOpen(row._id)" type="button" class="btn btn-icon icon btn-danger" >
+                  <span [data-feather]="'trash'"></span></button>
+              </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+        <label class="d-flex align-items-center"
+        >Afficher
+        <select class="form-control mx-25 selectPageSortWidth" [(ngModel)]="basicSelectedOption">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+        </select>
+         lignes</label>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Add and Update Domain Modal -->
+<ng-template #modalBasic let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="addDomaintitle" *ngIf="showAdd">Ajouter un domaine</h4>
+    <h4 class="modal-title" id="changeDomaintitle" *ngIf="showUpdate">Modifier domaine</h4>
+
+    <button type="button" id="close" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <form #domainForm="ngForm" class="event-form needs-validation">
+      <input type="hidden" class="form-control" name="_id"  [(ngModel)]="selectedDomain._id">
+      <div class="mb-2">
+        <label for="name" class="form-label">Nom de domaine</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          name="name"  
+          [(ngModel)]="selectedDomain.name" 
+          placeholder="Entrer le nom de domaine" 
+          required
+          [class.error]="domainSubmitted && formNameRef.invalid"
+          #formNameRef="ngModel"
+        >
+        <span *ngIf="domainSubmitted && formNameRef.invalid" class="invalid-form">
+          <small class="form-text text-danger" *ngIf="formNameRef.errors.required">Le nom est requis!</small>
+        </span>
+      </div>
+      <div>
+        <label for="contractor" class="form-label">Fournisseur</label>
+        <div class="input-group-append mb-2">
+          <ng-select 
+            class="selectWidth"
+            [items]="contractorsList"
+            bindLabel="name"
+            name="contractor"
+            placeholder="Sélectionner le fournisseur"
+            [(ngModel)]="selectedDomain.contractor"
+            [ngValue]="contractor"
+            #formContractorRef="ngModel"
+            [class.error]="domainSubmitted && formContractorRef.invalid"
+            required
+          >
+          </ng-select>
+            <button (click)="clickAddContractor(contractorModal)" type="button" class="btn btn-icon btn-success buttonMargin" >
+              <span [data-feather]="'plus'"></span>
+            </button>
+        </div>
+        <span *ngIf="domainSubmitted && formContractorRef.invalid" class="invalid-form">
+          <small class="form-text text-danger" *ngIf="formContractorRef.errors.required">Le fournisseur est requis!</small>
+        </span>
+      </div>
+      <div class="mb-2">
+          <label for="expiration_date" class="form-label">Date d'éxpiration</label>
+          <ng2-flatpickr 
+            [(ngModel)]="selectedDomain.expiration_date"
+            [config]="basicDateOptions"
+            name="expiration_date"
+            [setDate]="selectedDomain.expiration_date"
+            placeholder="Sélectionner la date d'éxpiration"
+            #formDateRef="ngModel"
+            required
+            [class.error]="domainSubmitted && formDateRef.invalid"
+            >
+          </ng2-flatpickr>
+          <span *ngIf="domainSubmitted && formDateRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formDateRef.errors.required">La date est requis!</small>
+          </span>
+      </div>
+      <div class="mb-2">
+          <label for="price" class="form-label">Montant (DT)</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            name="price"  
+            [(ngModel)]="selectedDomain.price" 
+            placeholder="Entrer le Montant en DT"
+            #formPriceRef="ngModel"
+            required
+            [class.error]="domainSubmitted && formPriceRef.invalid"
+          >
+          <span *ngIf="domainSubmitted && formPriceRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formPriceRef.errors.required">La montant est requis!</small>
+          </span>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="submit"  *ngIf="showAdd" (click)="postDomainDetails(domainForm)" class="btn btn-primary">Ajouter</button>
+    <button type="submit"  *ngIf="showUpdate" (click)="updateDomainDetails(domainForm)" class="btn btn-primary">Modifier</button>
+  </div>
+</ng-template>
+<!-- / Add and Update domain Modal -->
+  
+  
+<!-- Add contractor Modal -->
+<ng-template #contractorModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="addDomaintitle" >Ajouter un fournisseur</h4>
+    <button type="button" id="cancel" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <div class="form-group">
+      <ngb-alert class="error-class" [type]="'danger'" [dismissible]="false" *ngIf="error">
+        <div class="alert-body">
+          <p>{{ error }}</p>
+        </div>
+      </ngb-alert>
+    </div>
+    <form #contractorForm="ngForm" >
+      <input type="hidden" class="form-control" name="_id"  ngModel>
+      <div class="mb-2">
+        <label for="name" class="form-label">Nom de fournisseur</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          name="name"  
+          ngModel 
+          placeholder="Nom du fournisseur" 
+          #formContractorRef="ngModel"
+          required
+          [class.error]="contractorSubmitted && formContractorRef.invalid"
+          >
+          <span *ngIf="contractorSubmitted && formContractorRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formContractorRef.errors.required">La nom du fournisseur est requis!</small>
+          </span>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="postContractorDetails(contractorForm)" class="btn btn-primary">Ajouter</button>
+  </div>
+</ng-template>
+<!-- /Add contractor Modal -->
+

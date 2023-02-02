@@ -1,0 +1,116 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <div class="card">
+      <div class="card-header">
+        <h1>Liste des utilisateurs</h1>
+      </div>
+      <nav class="navbar">
+        <label class="d-flex align-items-center"
+        >Afficher
+        <select class="form-control mx-25" [(ngModel)]="basicSelectedOption">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+         lignes</label>
+        <div>
+        <label class="d-flex align-items-center">Filtrer</label>
+        <input class="form-control" type="search" placeholder="Filtrer" (keyup)="filterUpdate($event)">
+      </div>
+      </nav>
+      <div class="border-top" style="margin-bottom: 1rem !important;">
+      </div> 
+      <div class="col-md-12 mb-3" style="margin-top: 10px;">
+        <ngx-datatable 
+            *ngIf="usersList"
+            class="material container striped" 
+            [rows]="tableRows" 
+            [rowHeight]="58"
+            class="bootstrap core-bootstrap"
+            [limit]="10"
+            [columnMode]="ColumnMode.force"
+            [headerHeight]="40"
+            [footerHeight]="50"
+            [scrollbarH]="true"
+            [limit]="basicSelectedOption">
+            <ngx-datatable-column name="Nom" prop="name" [flexGrow]="2" >
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.name }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Prénom" prop="lastname"[flexGrow]="2">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row?.lastname }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Email" prop="email" [flexGrow]="2" [width]="250">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{row?.email}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Role" prop="role" [flexGrow]="2">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{row?.role}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [flexGrow]="2" name="Actions" [sortable]="false">
+              <ng-template let-row="row" ngx-datatable-cell-template >
+                <button *ngIf="row.email!= currentUser.email" (click)="onEdit(row, modalBasic)" type="button" class="btn btn-icon icon btn-info" >
+                  <span [data-feather]="'edit'"></span></button>
+                <button *ngIf="row.email!= currentUser.email" (click)="ConfirmTextOpen(row._id, row.email)" type="button" class="btn btn-icon icon btn-danger" >
+                  <span [data-feather]="'trash'"></span></button>
+              </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <!-- Update User Modal -->
+ <ng-template #modalBasic let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel1">Modifier utilisateur</h4>
+    <button type="button" id="close" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <form #userForm="ngForm">
+      <input type="hidden" class="form-control" name="_id"  [(ngModel)]="selectedUser._id">
+      <div class="mb-1">
+        <label for="name" class="form-label">Nom</label>
+        <input type="text" class="form-control" readonly="readonly" name="name"  [(ngModel)]="selectedUser.name" placeholder="Enter full name" required>
+      </div>
+      <div class="mb-1">
+        <label for="lastname" class="form-label">Prénom</label>
+        <input type="text" class="form-control" readonly="readonly" name="lastname"  [(ngModel)]="selectedUser.lastname" placeholder="last name">
+      </div>
+      <div class="mb-1">
+          <label for="birthday" class="form-label">Date de naissance</label>
+          <input type="text" class="form-control" readonly="readonly" name="birthday" (ngModelChange)="selectedUser.birthday = $event" [ngModel]="selectedUser.birthday | date:'yyyy-MM-dd'" placeholder="birthday">
+      </div>
+      <div class="mb-1">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" readonly="readonly" name="email"  [(ngModel)]="selectedUser.email" placeholder="email">
+      </div>
+      <div class="mb-1">
+        <label for="role" class="form-label">Rôle</label>
+        <select required  class="form-select" name="role" [(ngModel)]="selectedUser.role">
+          <option class="form-option" [selected]="selectedUser.role" ngValue="User">Utilisateur</option>
+          <option class="form-option" [selected]="selectedUser.role" ngValue="Admin">Administrateur</option>
+        </select>
+      </div>  
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="updateUserDetails(userForm)" class="btn btn-primary">Modifier</button>
+  </div>
+</ng-template>
+<!-- / Update User Modal -->
+
+
+
+ 

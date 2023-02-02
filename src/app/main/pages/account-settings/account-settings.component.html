@@ -1,0 +1,275 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <!-- content-header component -->
+    <!-- account setting page -->
+    <section id="page-account-settings">
+      <div class="row nav-vertical d-flex">
+        <div class="col-md-3 mb-2 mb-md-0">
+          <ul ngbNav #navVertical="ngbNav" class="nav nav-pills flex-column nav-left">
+            <li class="nav-item" ngbNavItem>
+              <a
+                ngbNavLink
+                class="nav-link d-flex py-75"
+                id="account-pill-general"
+                data-toggle="pill"
+                href="#account-vertical-general"
+                aria-expanded="true"
+              >
+                <i data-feather="user" class="font-medium-3 mr-1"></i>
+                <span class="font-weight-bold">Générale</span>
+              </a>
+              <ng-template ngbNavContent> 
+                <div class="card">
+                  <div class="card-body">
+                    <!-- form -->
+                    <form [formGroup]="accountSettingsForm" (ngSubmit)="updateCurrentUserDetails(accountSettingsForm)" class="validate-form mt-2" *ngIf="currentUser">
+                      <input type="hidden" class="form-control" formControlName="_id" name="_id">
+                      <div class="row">
+                        <div class="col-12 col-sm-6">
+                          <div class="form-group">
+                            <label for="account-username">Nom</label>
+                            <input
+                              type="text"
+                              formControlName="name"
+                              [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                              class="form-control"
+                              id="account-name"
+                              name="name"
+                              placeholder="Nom"
+                              autofocus=""
+                              tabindex="1"
+                            />
+                            <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                              <div *ngIf="f.name.errors.required">Le nom est requis</div>
+                            </div>
+                          </div>
+                          
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <div class="form-group">
+                            <label for="account-lastname">Prénom</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="account-lastname"
+                              formControlName="lastname"
+                              [ngClass]="{ 'is-invalid': submitted && f.lastname.errors }"
+                              name="lastname"
+                              placeholder="Prénom"
+                            />
+                            <div *ngIf="submitted && f.lastname.errors" class="invalid-feedback">
+                              <div *ngIf="f.lastname.errors.required">Le prénom est requis</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <div class="form-group">
+                            <label for="birthday">Date de naissance</label>
+                            <ng2-flatpickr
+                              [config]="basicDateOptions"
+                              name="birthday" 
+                              formControlName="birthday"
+                              [setDate]="currentUser.birthday" 
+                              required>
+                            </ng2-flatpickr>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <div class="form-group">
+                            <label for="account-e-mail">E-mail</label>
+                            <input
+                              type="email"
+                              formControlName="email"
+                              [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                              class="form-control"
+                              id="account-e-mail"
+                              name="email"
+                              placeholder="E-mail"
+                            />
+                            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                              <div *ngIf="f.email.errors.required">L'email est requis</div>
+                              <div *ngIf="f.email.errors.email">L'email doit être une adresse e-mail valide</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="custom-control custom-checkbox marginleft">
+                          <input 
+                          type="checkbox" 
+                          class="custom-control-input"
+                          formControlName="recievesNotifications" 
+                          name="recievesNotifications" 
+                          id="recievesNotifications" 
+                          />
+                          <label class="custom-control-label" for="recievesNotifications">Reçoit les notifications</label>
+                        </div>
+                        <input type="text" formControlName="role" class="form-control" name="role" hidden>
+                        <div class="error-class">
+                          <ngb-alert [type]="'danger'" [dismissible]="false" *ngIf="error">
+                            <div class="alert-body">
+                              <p>{{ error }}</p>
+                            </div>
+                          </ngb-alert>
+                        </div>
+                        <div class="col-12">
+                          <button type="submit" class="btn btn-primary mt-2 mr-1" rippleEffect>Enregistrer les modifications</button>
+                        </div>
+                      </div>
+                    </form>
+                    <!--/ form -->
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <li class="nav-item" ngbNavItem>
+              <a
+                ngbNavLink
+                class="nav-link d-flex py-75"
+                id="account-pill-password"
+                data-toggle="pill"
+                href="#account-vertical-password"
+                aria-expanded="false"
+              >
+                <i data-feather="lock" class="font-medium-3 mr-1"></i>
+                <span  class="font-weight-bold">Changer le mot de passe</span>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="card">
+                  <div class="card-body">
+                    <!-- form -->
+                    <form [formGroup]="changePasswordForm" (ngSubmit)="updateCurrentUserPassword(changePasswordForm)" class="validate-form" *ngIf="currentUser">
+                      <input type="text" formControlName="_id"  class="form-control" name="_id"  hidden>
+                      
+                      <div class="row">
+                        <div class="col-12 col-sm-6">
+                          <div class="form-group">
+                            <label for="account-old-password">Actuel</label>
+                            <div class="input-group form-password-toggle input-group-merge">
+                              <input
+                                [type]="passwordTextTypeOld ? 'text' : 'password'"
+                                formControlName="oldpassword" 
+                                class="form-control"
+                                [ngClass]="{ 'is-invalid error': passwordSubmitted && e.oldpassword.errors }"
+                                id="account-old-password"
+                                name="oldpassword"
+                                placeholder="Actuel"
+                              />
+                              <div class="input-group-append">
+                                <span class="input-group-text cursor-pointer"
+                                  ><i
+                                    class="feather font-small-4"
+                                    [ngClass]="{
+                                      'icon-eye-off': passwordTextTypeOld,
+                                      'icon-eye': !passwordTextTypeOld
+                                    }"
+                                    (click)="togglePasswordTextTypeOld()"
+                                  ></i
+                                ></span>
+                              </div>
+                            </div>
+                            <div
+                                *ngIf="passwordSubmitted && e.oldpassword.errors"
+                                class="invalid-feedback"
+                                [ngClass]="{ 'd-block': passwordSubmitted && e.oldpassword.errors }"
+                              >
+                                <div *ngIf="e.oldpassword.errors.required">Veuillez entrer votre mot de passe actuel.</div>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12 col-sm-6">
+                          <div class="form-group">
+                            <label for="password">Nouveau</label>
+                            <div class="input-group form-password-toggle input-group-merge">
+                              <input
+                                [type]="passwordTextTypeNew ? 'text' : 'password'"
+                                id="password"
+                                name="password"
+                                [ngClass]="{ 'is-invalid error': passwordSubmitted && e.password.errors }"
+                                formControlName="password" 
+                                class="form-control"
+                                placeholder="Nouveau"
+                              />
+                              <div class="input-group-append">
+                                <span class="input-group-text cursor-pointer"
+                                  ><i
+                                    class="feather font-small-4"
+                                    [ngClass]="{
+                                      'icon-eye-off': passwordTextTypeNew,
+                                      'icon-eye': !passwordTextTypeNew
+                                    }"
+                                    (click)="togglePasswordTextTypeNew()"
+                                  ></i
+                                ></span>
+                              </div>
+                            </div>
+                              <div
+                                *ngIf="passwordSubmitted && e.password.errors"
+                                class="invalid-feedback"
+                                [ngClass]="{ 'd-block': passwordSubmitted && e.password.errors }"
+                              >
+                                <div *ngIf="e.password.errors.required">Veuillez entrer votre nouveau mot de passe.</div>
+                              </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <div class="form-group">
+                            <label for="account-retype-new-password">Confirmer</label>
+                            <div class="input-group form-password-toggle input-group-merge">
+                              <input
+                                [type]="passwordTextTypeRetype ? 'text' : 'password'"
+                                class="form-control"
+                                id="account-retype-new-password"
+                                name="repeatpassword"
+                                [ngClass]="{ 'is-invalid error': passwordSubmitted && e.repeatpassword.errors }"
+                                formControlName="repeatpassword" 
+                                placeholder="Confirmer"
+                              />
+                              <div class="input-group-append">
+                                <span class="input-group-text cursor-pointer"
+                                  ><i
+                                    class="feather font-small-4"
+                                    [ngClass]="{
+                                      'icon-eye-off': passwordTextTypeRetype,
+                                      'icon-eye': !passwordTextTypeRetype
+                                    }"
+                                    (click)="togglePasswordTextTypeRetype()"
+                                  ></i
+                                ></span>
+                              </div>
+                            </div>
+                              <div
+                                *ngIf="passwordSubmitted && e.repeatpassword.errors"
+                                class="invalid-feedback"
+                                [ngClass]="{ 'd-block': passwordSubmitted && e.repeatpassword.errors }"
+                              >
+                                <div *ngIf="e.repeatpassword.errors.required">Veuillez confirmer votre mot de passe.</div>
+                              </div>
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <ngb-alert [type]="'danger'" [dismissible]="false" *ngIf="passError!=''">
+                            <div class="alert-body">
+                              <p>{{ passError }}</p>
+                            </div>
+                          </ngb-alert>
+                        </div>
+                        <div class="col-12">
+                          <button type="submit" class="btn btn-primary mr-1 mt-1" rippleEffect>Enregistrer les modifications</button>
+                          <button type="reset" id="_cancel" class="btn btn-outline-secondary mt-1" rippleEffect>Annuler</button>
+                        </div>
+                      </div>
+                    </form>
+                    <!--/ form -->
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+        <div [ngbNavOutlet]="navVertical" class="col-12 col-md-9"></div>
+      </div>
+    </section>
+    <!--/ account setting page -->
+  </div>
+</div>

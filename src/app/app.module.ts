@@ -19,16 +19,24 @@ import { coreConfig } from 'app/app-config';
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
 import { SampleModule } from 'app/main/sample/sample.module';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule} from '@angular/cdk/drag-drop';
+import { AuthGuard } from './auth/helpers/auth.guards';
+import { TokenInterceptorProvider } from './auth/helpers';
+
 
 const appRoutes: Routes = [
   {
     path: 'pages',
-    loadChildren: () => import('./main/pages/pages.module').then(m => m.PagesModule)
+    loadChildren: () => import('./main/pages/pages.module').then(m => m.PagesModule),
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./main/admin/admin.module').then(m => m.AdminModule),
+    canActivate: [AuthGuard]
   },
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: '/pages/events',
     pathMatch: 'full'
   },
   {
@@ -65,7 +73,7 @@ const appRoutes: Routes = [
     LayoutModule,
     SampleModule
   ],
-
+  providers:[TokenInterceptorProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

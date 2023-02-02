@@ -1,0 +1,197 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <section>
+<!-- Line Chart Card -->
+            <div class="row">
+                <div class="col-lg-4 col-sm-6 col-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-start pb-0">
+                    <div>
+                        <h2 class="font-weight-bolder">{{annualRev | currency: ' '}} DT</h2>
+                        <p class="mb-0">Revenu annuel</p>
+                    </div>
+                    <div class="avatar bg-light-success p-50">
+                        <div class="avatar-content">
+                        <i data-feather="trending-up" class="font-medium-5"></i>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 col-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-start pb-0">
+                    <div>
+                        <h2 class="font-weight-bolder">{{annualSpending | currency: ' '}} DT</h2>
+                        <p class="mb-0">Dépenses annuelles</p>
+                    </div>
+                    <div class="avatar bg-light-danger p-50">
+                        <div class="avatar-content">
+                        <i data-feather="trending-down" class="font-medium-5"></i>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 col-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-start pb-0">
+                        <div>
+                            <h2 class="font-weight-bolder">{{ annualRev - annualSpending | currency: ' '}} DT</h2>
+                            <p class="mb-0">Balance annuel</p>
+                        </div>
+                        <div class="avatar bg-light-primary p-50">
+                            <div class="avatar-content">
+                            <i data-feather="activity" class="font-medium-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!--/ Line Chart Card -->
+
+<!-- Stats Horizontal Card -->
+            <div class="row">
+                <div class="col-lg-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="font-weight-bolder mb-0">{{ monthlyRev | currency: ' '}} DT</h2>
+                                <p class="card-text">Revenue mensuel</p>
+                            </div>
+                            <div class="avatar bg-light-success p-40 m-0">
+                                <div class="avatar-content">
+                                <i data-feather="dollar-sign" class="font-medium-5"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="font-weight-bolder mb-0">{{ monthlySpending | currency: ' '}} DT</h2>
+                                <p class="card-text">Dépenses mensuelles</p>
+                            </div>
+                            
+                            <div class="avatar bg-light-danger p-40 m-0">
+                                <div class="avatar-content">
+                                    <i data-feather="dollar-sign" class="font-medium-5"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="font-weight-bolder mb-0">{{ monthlyAdvances | currency: ' '}} DT</h2>
+                                <p class="card-text">Avances mensuelles</p>
+                            </div>
+                            <div class="avatar bg-light-warning p-40 m-0">
+                                <div class="avatar-content">
+                                    <i data-feather="dollar-sign" class="font-medium-5"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="font-weight-bolder mb-0">{{ (monthlyRev - monthlySpending) | currency: ' '}} DT</h2>
+                                <p class="card-text">Balance mensuel</p>
+                            </div>
+                            <div class="avatar bg-light-primary p-40 m-0">
+                                <div class="avatar-content">
+                                    <i data-feather="activity" class="font-medium-5"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+<!--/ Stats Horizontal Card -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header" id="parent">
+                            <select [(ngModel)]="chosenMonth" class="form-control form-control-sm child" (ngModelChange)="refreshLineChart()">
+                                <option value="0">Janv.</option>
+                                <option value="1">Févr.</option>
+                                <option value="2">Mars</option>
+                                <option value="3">Avr.</option>
+                                <option value="4">Mai</option>
+                                <option value="5">Juin</option>
+                                <option value="6">Juil.</option>
+                                <option value="7">Août</option>
+                                <option value="8">Sept.</option>
+                                <option value="9">Oct.</option>
+                                <option value="10">Nov.</option>
+                                <option value="11">Déc.</option>
+                            </select>
+                            <select [(ngModel)]="chosenYear" class="form-control form-control-sm secondChild" (ngModelChange)="refreshLineChart()">
+                                <option *ngFor="let year of currentYears" [value]="year">{{ year }}</option>
+                                
+                            </select>
+                        </div>
+                        <div class="card-body">
+                            <div echarts  class="demo-chart" id="linechart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            
+                        </div>
+                        <div class="card-body">
+                            <div echarts class="demo-chart" id="annualSpendingChart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            
+                        </div>
+                        <div class="card-body">
+                            <div echarts class="demo-chart" id="monthlySpendingChart"></div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                        </div>
+                        <div class="card-body">
+                            <div echarts class="demo-chart" id="annualRevChart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            
+                        </div>
+                        <div class="card-body">
+                            <div echarts  class="demo-chart" id="monthlyRevChart"></div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+           
+        </section>
+    </div>
+</div>
