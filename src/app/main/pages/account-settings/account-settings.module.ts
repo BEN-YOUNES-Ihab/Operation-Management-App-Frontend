@@ -8,7 +8,7 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 
 import { CoreCommonModule } from '@core/common.module';
 
-import { AccountSettingsComponent } from './account-settings.component'; 
+import { AccountSettingsComponent } from './account-settings.component';
 import { AuthGuard } from 'app/auth/helpers/auth.guards';
 const routes: Routes = [
   {
